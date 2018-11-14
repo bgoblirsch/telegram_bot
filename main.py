@@ -74,7 +74,6 @@ reply_overview = "The Elements of FOAM Explained: \nhttps://youtu.be/LKb0y8z9TJg
 reply_rules = '1. No offensive or explicit content \n2. FOAM related discussion only \n3. No spam, ads, or referrals \n4. No posting links without context or links to non-FOAM specific Telegram groups \n5. No speculation or "moon" talk \n6. No profanity \n7. No GIFs \n8. Be respecftul to each other \n \nIf you want to create a local community group, please let us know so we can add it to the list of acceptable links for our bot.'
 
 whitelistedGroups = ['t.me/foamspace', 't.me/foamaustralia', 't.me/foamprotocol', 't.me/foamcalifornia', 't.me/foamportugal', 't.me/foamjapan', 't.me/foamfilipino', 't.me/foamfrance', 't.me/foamuk', 't.me/foamchina', 't.me/foamnetherlands', 't.me/foamtoronto', 't.me/foamcyprus', 't.me/foamgermany', 't.me/foambelgium', 't.me/foamphilippines', 't.me/foamindia', 't.me/foamnorway', 't.me/foamswusa', 't.me/foamsingapore', 't.me/foampoland', 't.me/foam_ru', 't.me/foammalaysia', 't.me/foamspain', 't.me/foamnyc', 't.me/foamsouthernus', 't.me/tokenfoundry', 't.me/foammidwestusa', 't.me/foamnz', 't.me/foamswitzerland', 't.me/foampnw', 'https://t.me/foam_us_mountainwest', 'https://t.me/foamrsa', 'https://t.me/foamgreece']
-# whitelistedGroups2 = ['https://t.me/foamspace', 'https://t.me/foamaustralia', 'https://t.me/foamprotocol', 'https://t.me/foamcalifornia', 'https://t.me/foamportugal', 'https://t.me/foamjapan', 'https://t.me/foamfilipino', 'https://t.me/foamfrance', 'https://t.me/foamuk', 'https://t.me/foamchina', 'https://t.me/foamnetherlands', 'https://t.me/foamtoronto', 'https://t.me/foamcyprus', 'https://t.me/foamgermany', 'https://t.me/foambelgium', 'https://t.me/foamphilippines', 'https://t.me/foamindia', 'https://t.me/foamnorway', 'https://t.me/foamswusa', 'https://t.me/foamsingapore', 'https://t.me/foampoland', 'https://t.me/foam_ru', 'https://t.me/foammalaysia', 'https://t.me/foamspain', 'https://t.me/foamnyc', 'https://t.me/foamsouthernus', 'https://t.me/tokenfoundry', 'https://t.me/foammidwestusa', 'https://t.me/foamnz', 'https://t.me/foamswitzerland']
 
 class WebhookHandler(webapp2.RequestHandler):
     def post(self):
@@ -121,8 +120,7 @@ class WebhookHandler(webapp2.RequestHandler):
         if not text:
             logging.info('no text')
             
-            
-
+ 
         def reply(msg=None):
             if msg:
                 resp = urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode({
@@ -158,25 +156,9 @@ class WebhookHandler(webapp2.RequestHandler):
                 'user_id': str(fr['id']),
             })).read()
         
-        
-        '''
-        def process_question(input):
-        	output = input
-        	# strip question mark
-        	if input[-1] == '?':
-        		output = input[:-1]
-        	output = output.replace('hello','')
-        	output = output.replace('hi','')
-        	output = output.replace('@admin','')
-        	output = output.replace('admin','')
-        	output = output.lstrip().rstrip()
-        	return output
-        	
-        def string_compare(a,b):
-        	return SequenceMatcher(None, a, b).ratio()
-        '''
+
             
-        # =============================     =============================================
+        # ==========================================================================
         
         # Lower user's message text
         if text:
@@ -258,7 +240,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     logging.error('unable to ban user or delete message')
                 return
         
-        '''
+        
         # Check if Ethereum address is in text
         if text and '0x' in text:
         	# variable to check if this was wrongly flagged for 0x protocol or FOAM Contract Address
@@ -296,7 +278,7 @@ class WebhookHandler(webapp2.RequestHandler):
                     logging.info('message deleted')
                 except:
                     logging.error('unable to delete message')
-        '''
+        
         
         # Check if file is attached and delete if it matches blacklisted file types
         
@@ -412,56 +394,6 @@ class WebhookHandler(webapp2.RequestHandler):
         else:
             return    
             
-
-        
-'''       
-        # Question Bank - a little too complicated, could maybe revisit this someday       
-        questions_tge = ['when ico', 'when is ico', 'when is the ico', 'when can i buy token', 'when can i buy the token', 'when is the token sale', 'when token sale', 'when can i purchase token', 'when can i purchase the token']
-        questions_whitelist = ['is there a whitelist', 'is there a whitelist for ico', 'is there a whitelist for the utility token distribution event', 'where is the whitelist', 'when is the whitelist', 'is there a whitelisting', 'will there be a whitelisting',]
-        questions_whitepaper = ['where is the whitepaper', 'when will the whitepaper be available', 'when will the whitepaper be ready', 'when will you share the whitepaper', 'where can i find the whitepaper', 'when is the whitepaper going to be available', 'is there a whitepaper']
-        questions_team = ['where are you located', "how big is your team", "where are your headquarters"]
-        
-        
-		if text in questions_tge:
-			reply(reply_tde)
-			return
-		elif text in questions_whitepaper:
-			reply(reply_whitepaper)
-
-        # Question handlers
-        
-        question = process_question(text)
-        
-        if text.endswith('?'):
-        	if 'token' in question or 'ico' in question:
-       			for i in questions_tge:
-        			if i in question or string_compare(question,i) > 0.8:
-        				reply(reply_tge)
-        				return
-        	elif 'whitelist' in question:
-        		for i in questions_whitelist:
-        			if i in question or string_compare(question,i) > 0.8:
-        				reply(reply_whitelist)
-        				return
-        	elif 'whitepaper' in question or 'white paper' in question:
-        		for i in questions_whitepaper:
-        			if i in question or string_compare(question,i) > 0.8:
-        				reply(reply_whitepaper)
-        				return
-       	
-       	if question in questions_tge:
-       		reply(reply_tge)
-       		return
-       	elif question in questions_whitelist:
-       		reply(reply_whitelist)
-       		return
-       	elif question in questions_whitepaper:
-       		reply(reply_whitepaper)
-       		return
-       	elif question in questions_team:
-       		reply(reply_team)
-       		return       		       	       	           
-'''
 
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
