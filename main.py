@@ -165,6 +165,7 @@ class WebhookHandler(webapp2.RequestHandler):
             text = text.lower()   
                 
         # if /command -> respond with correct response
+        # *TO-DO* Replace with function and a dictionary to clean up code
         if text and text.startswith('/'):
             # When the help menu is called, and a user clicks on one of the commands, it appends "@FOAM_Protocol_bot" to the command
             # This checks for and removes that text
@@ -281,7 +282,6 @@ class WebhookHandler(webapp2.RequestHandler):
         
         
         # Check if file is attached and delete if it matches blacklisted file types
-        
         if fileName and '.scr' in fileName:
             try:
                 deleteMsg()
